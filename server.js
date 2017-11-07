@@ -11,17 +11,35 @@ server.listen(port);
 var io = require('socket.io')(server);
 var players = {};
 var score = [];
-var shapes = {};
+var shapes = [];
 var shapeSize = 50;
 
 io.on('connection', function(socket) {
   socket.emit('initialize', {
     id: socket.id,
-    score: score
+    score: score,
+    shapes: shapes
   });
+
   socket.on('hit', function(data) {
-    delete shapes[data.id];
-    io.emit('destroyShape', data.id);
+    for (var i = 0, len = shapes.length; i < len; i++) {
+      if (shapes[i].id == data.id) {
+        io.emit('destroyShape', shapes[i].id);
+        shapes.splice(i, 1);
+        break;
+      }
+    }
+
+    var newShape = {
+      id: count,
+      x: getRandomInt(shapeSize, 800 - shapeSize),
+      y: getRandomInt(shapeSize, 600 - shapeSize),
+      size: shapeSize
+    };
+    shapes.push(newShape)
+    io.emit('shape', newShape);
+    count++;
+
     var found = false;
     for (var i = 0, len = score.length; i < len; i++) {
       if (score[i].id == socket.id) {
@@ -49,33 +67,33 @@ io.on('connection', function(socket) {
 });
 
 var count = 0;
-var tps = 1;
-const gameloop = require('node-gameloop');
-const id = gameloop.setGameLoop(function(deltaTime) {
-  shapes[count] = {
-    id: count,
-    x: getRandomInt(shapeSize, 800 - shapeSize),
-    y: getRandomInt(shapeSize, 600 - shapeSize),
-    size: shapeSize
-  }
-  io.emit('shape', shapes[count]);
-  count++;
-  if (count % 60 == 0) {
-    for (var id in shapes) {
-      delete shapes[id];
-      io.emit('destroyShape', id);
-    }
-  }
-}, 1000 / tps);
+var newShape = {
+  id: count,
+  x: getRandomInt(shapeSize, 800 - shapeSize),
+  y: getRandomInt(shapeSize, 600 - shapeSize),
+  size: shapeSize
+};
+shapes.push(newShape)
+io.emit('shape', newShape);
+count++;
+// var tps = 2;
+// const gameloop = require('node-gameloop');
+// const id = gameloop.setGameLoop(function(deltaTime) {
+//   var newShape = {
+//     id: count,
+//     x: getRandomInt(shapeSize, 800 - shapeSize),
+//     y: getRandomInt(shapeSize, 600 - shapeSize),
+//     size: shapeSize
+//   };
+//   shapes.push(newShape)
+//   io.emit('shape', newShape);
+//   count++;
+//   if (shapes.length > 5) {
+//     var remove = shapes.shift();
+//     io.emit('destroyShape', remove.id);
+//   }
+// }, 1000 / tps);
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function hit(clickX, clickY, shapeX, shapeY) {
-  if ((clickX > shapeX) && (clickX < shapeX + shapeSize) && (clickY > shapeY) && (clickY < shapeY + shapeSize)) {
-    return true;
-  } else {
-    return false;
-  }
 }

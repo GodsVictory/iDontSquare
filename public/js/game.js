@@ -1,9 +1,6 @@
 var app;
 var socket;
-var id;
-var player;
-var mobile;
-var shapes = {};
+var shapes = [];
 
 window.onload = function start() {
   PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
