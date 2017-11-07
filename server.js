@@ -65,6 +65,12 @@ const id = gameloop.setGameLoop(function(deltaTime) {
   }
   io.emit('shape', shapes[count]);
   count++;
+  if (count % 60 == 0) {
+    for (var id in shapes) {
+      delete shapes[id];
+      io.emit('destroyShape', id);
+    }
+  }
 }, 1000 / tps);
 
 function getRandomInt(min, max) {
