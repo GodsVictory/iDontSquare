@@ -15,7 +15,7 @@ function openSocket() {
     delete shapes[id];
   });
   socket.on('shape', function(shape) {
-    shapes[shape.id] = new Shape(shape.id, shape.x, shape.y);
+    shapes[shape.id] = new Shape(shape.id, shape.x, shape.y, shape.size);
   });
 };
 

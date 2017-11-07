@@ -12,45 +12,39 @@ var io = require('socket.io')(server);
 var players = {};
 var score = [];
 var shapes = {};
-var shapeSize = 25;
+var shapeSize = 50;
 
 io.on('connection', function(socket) {
   socket.emit('initialize', {
     id: socket.id,
     score: score
   });
-  socket.on('click', function(data) {
-    for (var id in shapes) {
-      if (hit(data.x, data.y, shapes[id].x, shapes[id].y)) {
-        delete shapes[id];
-        io.emit('destroyShape', id);
-
-        var found = false;
-        for (var i = 0, len = score.length; i < len; i++) {
-          if (score[i].id == socket.id) {
-            score[i].name = data.name;
-            score[i].score++;
-            found = true;
-            if (score[i].score >= 51) {
-              score = [];
-            }
-          }
+  socket.on('hit', function(data) {
+    delete shapes[data.id];
+    io.emit('destroyShape', data.id);
+    var found = false;
+    for (var i = 0, len = score.length; i < len; i++) {
+      if (score[i].id == socket.id) {
+        score[i].name = data.name;
+        score[i].score++;
+        found = true;
+        if (score[i].score >= 51) {
+          score = [];
         }
-        if (!found) {
-          score.push({
-            id: socket.id,
-            name: data.name,
-            score: 1
-          });
-        }
-
-        score.sort(function(a, b) {
-          return b.score - a.score;
-        });
-        io.emit('score', score);
-        break;
       }
     }
+    if (!found) {
+      score.push({
+        id: socket.id,
+        name: data.name,
+        score: 1
+      });
+    }
+
+    score.sort(function(a, b) {
+      return b.score - a.score;
+    });
+    io.emit('score', score);
   });
 });
 
@@ -61,7 +55,8 @@ const id = gameloop.setGameLoop(function(deltaTime) {
   shapes[count] = {
     id: count,
     x: getRandomInt(shapeSize, 800 - shapeSize),
-    y: getRandomInt(shapeSize, 600 - shapeSize)
+    y: getRandomInt(shapeSize, 600 - shapeSize),
+    size: shapeSize
   }
   io.emit('shape', shapes[count]);
   count++;
