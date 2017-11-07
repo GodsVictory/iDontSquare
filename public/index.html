@@ -5,7 +5,6 @@
   <script src="js/lib/pixi.min.js"></script>
   <script src="js/lib/isMobile.js"></script>
   <script src="js/game.js"></script>
-  <script src="js/Shape.js"></script>
 
   <style>
     body {
@@ -17,7 +16,6 @@
       height: 100%;
       padding: 0px;
       margin: 0px;
-      pointer-events: none;
       -webkit-user-select: none;
       /* Chrome/Safari */
       -moz-user-select: none;
@@ -27,43 +25,42 @@
       /* Rules below not implemented in browsers yet */
       -o-user-select: none;
       user-select: none;
-    }
 
-    #game {
-      background-color: white;
-      position: absolute;
-      top: 40px;
-      left: 0px;
-      width: 800px;
-      height: 600px;
-      padding: 0px;
-      margin: 0px;
-      pointer-events: auto;
-    }
-
-    #score {
-      background-color: white;
-      position: absolute;
-      text-align: right;
-      top: 40px;
-      left: 800px;
-      width: 300px;
-      height: 600px;
-      padding: 0px;
-      margin: 0px;
       font-size: 16px;
       font-family: Arial;
       font-weight: bold;
     }
 
-    #name {
+    #score {
+      z-index: 1000;
+      background-color: none;
+      overflow: hidden;
+      position: absolute;
+      text-align: right;
+      line-height: .5;
+      bottom:0;
+      left: 0;
+      width: 150px;
+      height: 300px;
+      padding: 0px;
+      margin: 0px;
+      pointer-events: none;
+
+    }
+
+    .name {
       pointer-events: auto;
+      z-index: 1000;
+      position: relative;
+      top:0;
+      outline-width: 0;
+      border-width:0px;
+      border:none;
     }
   </style>
 </head>
 
 <body>
-  <div id="game"></div>
   <div id="score"></div>
-  Name: <input type="text" id="name">
+  <div class="name">Name: <input type="text" class="name" id="name"></div>
 </body>

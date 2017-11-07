@@ -13,7 +13,7 @@ var score = [];
 var shape;
 var shapeSize = 50;
 
-var shape = {
+shape = {
   x: getRandomInt(shapeSize, 800 - shapeSize),
   y: getRandomInt(shapeSize, 600 - shapeSize),
   size: shapeSize
@@ -28,7 +28,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('hit', function(data) {
-    var shape = {
+    shape = {
       x: getRandomInt(shapeSize, 800 - shapeSize),
       y: getRandomInt(shapeSize, 600 - shapeSize),
       size: shapeSize

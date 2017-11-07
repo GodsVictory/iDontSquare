@@ -4,11 +4,15 @@ var shape;
 
 window.onload = function start() {
   PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
-  app = new PIXI.Application(800, 600, {
+  app = new PIXI.Application(window.innerWidth, window.innerHeight, {
     backgroundColor: 0xFFFFFF,
     antialias: true
   });
-  document.getElementById('game').appendChild(app.view);
+  document.body.appendChild(app.view);
+  app.renderer.view.style.position = 'absolute';
+  app.renderer.view.style.top = 0;
+  app.renderer.view.style.left = 0;
+  app.renderer.view.style.zIndex = 0;
 
   socket = io();
   socket.on('initialize', function(data) {
@@ -22,7 +26,10 @@ window.onload = function start() {
   socket.on('shape', function(shape) {
     newShape(shape.x, shape.y, shape.size);
   });
-};
+  window.onresize = function() {
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+  }
+}
 
 function printScore(data) {
   document.getElementById('score').innerHTML = "";
@@ -42,6 +49,7 @@ function newShape(x, y, size) {
   app.stage.addChild(shape);
   shape.interactive = true;
   shape.on('pointerdown', function() {
+    console.log('test');
     socket.emit('hit', {
       name: document.getElementById('name').value
     });
