@@ -31,42 +31,45 @@ io.on('connection', function(socket) {
 
   socket.on('hit', function(data) {
     if (data.id == shape.id) {
-    shape = {
-      id: count++,
-      x: getRandomInt(5, 85),
-      y: getRandomInt(5, 85),
-      size: shapeSize
-    };
-    io.emit('shape', shape);
+      shape = {
+        id: count++,
+        x: getRandomInt(5, 85),
+        y: getRandomInt(5, 85),
+        size: shapeSize
+      };
+      io.emit('shape', shape);
 
 
-    var found = false;
-    for (var i = 0, len = score.length; i < len; i++) {
-      if (score[i].id == socket.id) {
-        score[i].name = data.name;
-        score[i].score++;
-        found = true;
-        if (score[i].score >= 51) {
-          score = [];
+      var found = false;
+      for (var i = 0, len = score.length; i < len; i++) {
+        if (score[i].id == socket.id) {
+          score[i].name = data.name;
+          score[i].score++;
+          found = true;
+          if (score[i].score >= 51) {
+            score = [];
+          }
+          break;
         }
-        break;
+      }
+      if (!found) {
+        score.push({
+          id: socket.id,
+          name: data.name,
+          score: 1
+        });
+      }
+
+      if (score) {
+        score.sort(function(a, b) {
+          return b.score - a.score;
+        });
+        io.emit('score', {
+          score: score,
+          lastHit: data.name
+        });
       }
     }
-    if (!found) {
-      score.push({
-        id: socket.id,
-        name: data.name,
-        score: 1
-      });
-    }
-
-    if (score) {
-      score.sort(function(a, b) {
-        return b.score - a.score;
-      });
-      io.emit('score', score); 
-    }
-  }
   });
 });
 

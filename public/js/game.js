@@ -21,7 +21,8 @@ window.onload = function start() {
     newShape(data.shape.id, data.shape.x, data.shape.y, data.shape.size);
   });
   socket.on('score', function(data) {
-    printScore(data);
+    printScore(data.score);
+    document.getElementById('lastHit').innerHTML = data.lastHit;
   });
   socket.on('shape', function(shape) {
     newShape(shape.id, shape.x, shape.y, shape.size);

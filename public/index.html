@@ -17,15 +17,10 @@
       padding: 0px;
       margin: 0px;
       -webkit-user-select: none;
-      /* Chrome/Safari */
       -moz-user-select: none;
-      /* Firefox */
       -ms-user-select: none;
-      /* IE10+ */
-      /* Rules below not implemented in browsers yet */
       -o-user-select: none;
       user-select: none;
-
       font-size: 16px;
       font-family: Arial;
       font-weight: bold;
@@ -53,20 +48,37 @@
       padding: 0;
     }
 
-    .name {
+    #name {
       opacity: .5;
-      pointer-events: auto;
       z-index: 1000;
-      position: relative;
-      top: 0;
+      position: absolute;
+      top: 1px;
+      left: 55px;
       outline-width: 0;
       border-width: 0px;
       border: none;
+    }
+
+    #nameDiv {
+      opacity: .25;
+      z-index: 1000;
+      position: absolute;
+      top: 0;
+    }
+
+    #lastHit {
+      z-index: 1000;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
   <div id="score"></div>
-  <div class="name">Name: <input type="text" class="name" id="name"></div>
+  <div id="lastHit"></div>
+  <div id="nameDiv">Name:</div>
+  <input type="text" id="name">
 </body>
