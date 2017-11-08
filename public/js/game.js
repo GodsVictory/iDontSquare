@@ -6,7 +6,7 @@ window.onload = function start() {
   PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
   app = new PIXI.Application(window.innerWidth, window.innerHeight, {
     backgroundColor: 0xFFFFFF,
-    antialias: true
+    antialias: false
   });
   document.body.appendChild(app.view);
   app.renderer.view.style.position = 'absolute';
