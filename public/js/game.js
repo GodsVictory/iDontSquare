@@ -45,11 +45,11 @@ function newShape(x, y, size) {
     shape.destroy();
   shape = new PIXI.Graphics();
   shape.beginFill(0x000000, 1);
-  shape.drawRect(x, y, size, size);
+  shape.drawRect(parseFloat("." + x) * window.innerWidth, parseFloat("." + y) * window.innerHeight, size, size);
+  shape.anchor.set(.5);
   app.stage.addChild(shape);
   shape.interactive = true;
   shape.on('pointerdown', function() {
-    console.log('test');
     socket.emit('hit', {
       name: document.getElementById('name').value
     });

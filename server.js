@@ -14,8 +14,8 @@ var shape;
 var shapeSize = 50;
 
 shape = {
-  x: getRandomInt(shapeSize, 800 - shapeSize),
-  y: getRandomInt(shapeSize, 600 - shapeSize),
+  x: getRandomInt(10, 90),
+  y: getRandomInt(10, 90),
   size: shapeSize
 };
 io.emit('shape', shape);
@@ -29,8 +29,8 @@ io.on('connection', function(socket) {
 
   socket.on('hit', function(data) {
     shape = {
-      x: getRandomInt(shapeSize, 800 - shapeSize),
-      y: getRandomInt(shapeSize, 600 - shapeSize),
+      x: getRandomInt(10, 90),
+      y: getRandomInt(10, 90),
       size: shapeSize
     };
     io.emit('shape', shape);
