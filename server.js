@@ -12,8 +12,10 @@ var io = require('socket.io')(server);
 var score = [];
 var shape;
 var shapeSize = 50;
+var count = 0;
 
 shape = {
+  id: count++,
   x: getRandomInt(5, 85),
   y: getRandomInt(5, 85),
   size: shapeSize
@@ -28,12 +30,15 @@ io.on('connection', function(socket) {
   });
 
   socket.on('hit', function(data) {
+    if (data.id == shape.id) {
     shape = {
+      id: count++,
       x: getRandomInt(5, 85),
       y: getRandomInt(5, 85),
       size: shapeSize
     };
     io.emit('shape', shape);
+
 
     var found = false;
     for (var i = 0, len = score.length; i < len; i++) {
@@ -44,6 +49,7 @@ io.on('connection', function(socket) {
         if (score[i].score >= 51) {
           score = [];
         }
+        break;
       }
     }
     if (!found) {
@@ -54,10 +60,13 @@ io.on('connection', function(socket) {
       });
     }
 
-    score.sort(function(a, b) {
-      return b.score - a.score;
-    });
-    io.emit('score', score);
+    if (score) {
+      score.sort(function(a, b) {
+        return b.score - a.score;
+      });
+      io.emit('score', score); 
+    }
+  }
   });
 });
 
