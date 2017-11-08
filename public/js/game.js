@@ -18,13 +18,13 @@ window.onload = function start() {
   socket.on('initialize', function(data) {
     document.getElementById('name').value = data.id.substr(0, 5);
     printScore(data.score);
-    newShape(data.shape.x, data.shape.y, data.shape.size);
+    newShape(data.shape.id, data.shape.x, data.shape.y, data.shape.size);
   });
   socket.on('score', function(data) {
     printScore(data);
   });
   socket.on('shape', function(shape) {
-    newShape(shape.x, shape.y, shape.size);
+    newShape(shape.id, shape.x, shape.y, shape.size);
   });
   window.onresize = function() {
     app.renderer.resize(window.innerWidth, window.innerHeight);
@@ -40,16 +40,19 @@ function printScore(data) {
   }
 }
 
-function newShape(x, y, size) {
+function newShape(id, x, y, size) {
   if (shape)
     shape.destroy();
+
   shape = new PIXI.Graphics();
+  shape.id = id;
   shape.beginFill(0x000000, 1);
   shape.drawRect(parseFloat("." + x) * window.innerWidth, parseFloat("." + y) * window.innerHeight, size, size);
   app.stage.addChild(shape);
   shape.interactive = true;
   shape.on('pointerdown', function() {
     socket.emit('hit', {
+      id: shape.id,
       name: document.getElementById('name').value
     });
   });
